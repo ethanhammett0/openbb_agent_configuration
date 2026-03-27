@@ -1,0 +1,19 @@
+{
+  "mcpServers": {
+    "openbb": {
+      "command": ".venv/bin/openbb-mcp",
+      "args": [
+        "--transport", "stdio",
+        "--system-prompt", "config/system_prompt.txt",
+        "--server-prompts", "config/server_prompts.json",
+        "--default-categories", "equity,economy,news,crypto,etf,index,currency,fixedincome,regulators,derivatives"
+      ],
+      "env": {
+        "OPENBB_MCP_NAME": "OpenBB Equity Research",
+        "OPENBB_MCP_ENABLE_TOOL_DISCOVERY": "true",
+        "OPENBB_MCP_DESCRIBE_RESPONSES": "true",
+        "OPENBB_MCP_CACHE_EXPIRATION_SECONDS": "300"
+      }
+    }
+  }
+}

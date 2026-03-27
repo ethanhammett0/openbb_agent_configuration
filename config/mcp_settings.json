@@ -1,0 +1,13 @@
+{
+  "name": "OpenBB Equity Research",
+  "description": "OpenBB MCP server configured for equity research analysis with Claude",
+  "enable_tool_discovery": true,
+  "describe_responses": true,
+  "default_tool_categories": ["all"],
+  "cache_expiration_seconds": 300,
+  "on_duplicate_tools": "warn",
+  "uvicorn_config": {
+    "host": "127.0.0.1",
+    "port": 8001
+  }
+}

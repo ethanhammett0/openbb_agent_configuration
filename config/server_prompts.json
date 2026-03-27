@@ -1,0 +1,152 @@
+[
+  {
+    "name": "company_snapshot",
+    "description": "Quick company snapshot: profile, current quote, key fundamentals, and recent news",
+    "content": "Provide a comprehensive snapshot for {symbol}:\n1. Company profile and description\n2. Current stock quote and daily performance\n3. Key financial metrics (market cap, P/E, EV/EBITDA, dividend yield)\n4. Last quarter earnings summary\n5. Top 3 recent news headlines\n\nFormat as a concise executive briefing.",
+    "arguments": [
+      {
+        "name": "symbol",
+        "type": "str",
+        "description": "Stock ticker symbol (e.g., AAPL, MSFT)"
+      }
+    ],
+    "tags": ["equity", "overview"]
+  },
+  {
+    "name": "full_equity_report",
+    "description": "Generate a full institutional-quality equity research report",
+    "content": "Generate a comprehensive equity research report for {symbol}.\n\nInclude the following sections:\n\n## Investment Summary\n- Bull/bear thesis with key drivers\n\n## Company Overview\n- Business description, segments, competitive positioning\n\n## Financial Analysis\n- Income statement trends (3-year revenue, margins, EPS)\n- Balance sheet health (leverage, liquidity, working capital)\n- Cash flow quality (FCF generation, capex intensity, shareholder returns)\n\n## Valuation\n- Trading multiples vs. historical range and peers: {peers}\n- P/E, EV/EBITDA, P/FCF, EV/Revenue\n\n## Growth Outlook\n- Analyst consensus estimates and recent revisions\n- Revenue and earnings growth trajectory\n\n## Ownership & Sentiment\n- Top institutional holders and recent changes\n- Insider activity\n- Short interest\n\n## Risk Factors\n- Key risks to thesis\n\n## Catalysts\n- Upcoming earnings, events, macro drivers\n\nPresent all data in clean tables. Flag any data gaps.",
+    "arguments": [
+      {
+        "name": "symbol",
+        "type": "str",
+        "description": "Stock ticker symbol (e.g., AAPL)"
+      },
+      {
+        "name": "peers",
+        "type": "str",
+        "description": "Comma-separated peer tickers for comparison (e.g., MSFT,GOOGL,META)",
+        "default": ""
+      }
+    ],
+    "tags": ["equity", "research", "report"]
+  },
+  {
+    "name": "earnings_preview",
+    "description": "Pre-earnings analysis with estimates, whisper numbers, and historical beat rates",
+    "content": "Build an earnings preview for {symbol}:\n1. Consensus EPS and revenue estimates for the upcoming quarter\n2. Estimate revision trends over the past 30/60/90 days\n3. Historical earnings surprise pattern (last 8 quarters)\n4. Key metrics to watch this quarter\n5. Options-implied move vs. historical realized move\n6. Recent analyst commentary and price target changes\n\nFormat as a pre-earnings briefing note.",
+    "arguments": [
+      {
+        "name": "symbol",
+        "type": "str",
+        "description": "Stock ticker symbol"
+      }
+    ],
+    "tags": ["equity", "earnings"]
+  },
+  {
+    "name": "peer_comparison",
+    "description": "Side-by-side peer comparison on fundamentals, valuation, and performance",
+    "content": "Create a detailed peer comparison table for these companies: {symbols}\n\nCompare across:\n1. Valuation: P/E, EV/EBITDA, P/S, P/B, PEG\n2. Growth: Revenue growth (YoY), EPS growth (YoY), forward estimates\n3. Profitability: Gross margin, operating margin, net margin, ROE, ROIC\n4. Balance Sheet: Debt/Equity, Net Debt/EBITDA, Current Ratio\n5. Returns: YTD, 1Y, 3Y total return\n6. Dividends: Yield, payout ratio, growth rate\n\nPresent as a single comparison table with rankings. Highlight best-in-class metrics.",
+    "arguments": [
+      {
+        "name": "symbols",
+        "type": "str",
+        "description": "Comma-separated ticker symbols (e.g., AAPL,MSFT,GOOGL,META,AMZN)"
+      }
+    ],
+    "tags": ["equity", "valuation", "comparison"]
+  },
+  {
+    "name": "macro_dashboard",
+    "description": "Macro economic dashboard: rates, inflation, employment, GDP, and market indicators",
+    "content": "Build a macroeconomic dashboard covering:\n1. Interest Rates: Fed funds rate, 2Y/10Y Treasury yields, yield curve shape\n2. Inflation: Latest CPI, Core CPI, PCE, PPI readings and trends\n3. Employment: Latest NFP, unemployment rate, initial claims trend\n4. Growth: GDP (latest quarter), GDP estimates, leading indicators\n5. Market Indicators: VIX, credit spreads (IG/HY), dollar index\n6. Sector Performance: S&P 500 sector returns (1W, 1M, 3M, YTD)\n\nHighlight any recent surprises or inflection points. Focus on what matters for {sector} sector positioning.",
+    "arguments": [
+      {
+        "name": "sector",
+        "type": "str",
+        "description": "Sector focus for macro commentary (e.g., Technology, Healthcare, Financials)",
+        "default": "broad market"
+      }
+    ],
+    "tags": ["economy", "macro", "dashboard"]
+  },
+  {
+    "name": "sector_screen",
+    "description": "Screen stocks in a sector by financial criteria",
+    "content": "Screen for stocks in the {sector} sector with the following criteria:\n- Market cap above {min_market_cap}\n- Positive revenue growth\n- {additional_criteria}\n\nFor the top results, show:\n- Ticker, Company Name, Market Cap\n- P/E, EV/EBITDA, Revenue Growth, EPS Growth\n- Gross Margin, Operating Margin, ROE\n- YTD Performance, Dividend Yield\n\nRank by {sort_by} and present as a screening table.",
+    "arguments": [
+      {
+        "name": "sector",
+        "type": "str",
+        "description": "Sector to screen (e.g., Technology, Healthcare)"
+      },
+      {
+        "name": "min_market_cap",
+        "type": "str",
+        "description": "Minimum market cap filter (e.g., 10B, 1B, 500M)",
+        "default": "1B"
+      },
+      {
+        "name": "sort_by",
+        "type": "str",
+        "description": "Metric to rank by (e.g., revenue_growth, pe_ratio, market_cap)",
+        "default": "market_cap"
+      },
+      {
+        "name": "additional_criteria",
+        "type": "str",
+        "description": "Additional screening criteria in plain English",
+        "default": "None"
+      }
+    ],
+    "tags": ["equity", "screening"]
+  },
+  {
+    "name": "ownership_analysis",
+    "description": "Deep dive into institutional ownership, insider activity, and short interest",
+    "content": "Analyze the ownership structure for {symbol}:\n1. Top 20 institutional holders with recent position changes\n2. Insider transactions over the last 12 months (buys vs. sells, dollar amounts)\n3. Short interest: current shares short, days to cover, trend\n4. Institutional ownership percentage and trend\n5. Any 13D/13G filings (activist positions)\n6. Notable fund manager commentary if available\n\nHighlight any meaningful signals from ownership data.",
+    "arguments": [
+      {
+        "name": "symbol",
+        "type": "str",
+        "description": "Stock ticker symbol"
+      }
+    ],
+    "tags": ["equity", "ownership"]
+  },
+  {
+    "name": "fixed_income_overview",
+    "description": "Fixed income market overview: yield curves, spreads, and rate expectations",
+    "content": "Provide a fixed income market overview:\n1. US Treasury yield curve (1M through 30Y)\n2. Yield curve shape analysis (2s10s spread, 3m10y spread)\n3. Investment grade and high yield credit spreads\n4. Fed funds futures implied rate path\n5. Recent Fed commentary and dot plot positioning\n6. Corporate bond market conditions\n\nContext: This is for understanding the rate backdrop for {context}.",
+    "arguments": [
+      {
+        "name": "context",
+        "type": "str",
+        "description": "What the rate analysis is for (e.g., bank stock valuation, REIT analysis, general equity risk premium)",
+        "default": "general equity research"
+      }
+    ],
+    "tags": ["fixedincome", "rates"]
+  },
+  {
+    "name": "morning_briefing",
+    "description": "Daily morning briefing: overnight markets, key data releases, earnings, and news",
+    "content": "Generate a morning market briefing:\n1. Overnight market summary (Asia, Europe futures)\n2. US equity futures and pre-market movers\n3. Key economic data releases today and this week\n4. Earnings reports today and this week\n5. Top market-moving news headlines\n6. Sector/thematic trends to watch\n\nKeep it concise and actionable - this is for the morning meeting.",
+    "arguments": [],
+    "tags": ["news", "market", "daily"]
+  },
+  {
+    "name": "dcf_inputs",
+    "description": "Gather all inputs needed for a DCF valuation model",
+    "content": "Gather the data inputs needed to build a DCF model for {symbol}:\n1. Historical financials (3-5 years): Revenue, EBITDA, EBIT, Net Income, FCF, CapEx, D&A\n2. Current balance sheet: Cash, Total Debt, Shares Outstanding, Minority Interest\n3. Analyst consensus estimates: Revenue and EPS for next 2-3 fiscal years\n4. Cost of capital inputs: Beta, risk-free rate (10Y Treasury), credit spread\n5. Comparable company multiples for terminal value: EV/EBITDA range\n6. Industry revenue growth rates for sanity-checking projections\n\nPresent in a format ready to plug into a financial model.",
+    "arguments": [
+      {
+        "name": "symbol",
+        "type": "str",
+        "description": "Stock ticker symbol"
+      }
+    ],
+    "tags": ["equity", "valuation", "dcf"]
+  }
+]
