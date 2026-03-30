@@ -1,60 +1,32 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# OpenBB MCP Server Setup for Claude Code
-# Installs the OpenBB platform with MCP server and equity research providers
+# OpenBB MCP Connector Setup for Claude Code
+# Minimal setup — uvx handles OpenBB installation automatically
 
-echo "=== OpenBB MCP Server Setup for Equity Research ==="
+echo "=== OpenBB MCP Connector Setup ==="
 echo ""
 
-# Check Python version
-python_version=$(python3 --version 2>/dev/null | cut -d' ' -f2 | cut -d'.' -f1,2)
-if [[ -z "$python_version" ]]; then
-    echo "ERROR: Python 3.10+ is required. Please install Python first."
+# Check for uv/uvx
+if ! command -v uvx &>/dev/null; then
+    echo "Installing uv (Python package runner)..."
+    curl -LsSf https://astral.sh/uv/install.sh | sh
+    export PATH="$HOME/.local/bin:$PATH"
+fi
+
+echo "uvx found: $(uvx --version)"
+
+# Verify the OpenBB MCP server can be resolved
+echo "Verifying openbb-mcp-server package..."
+uvx --from openbb-mcp-server openbb-mcp --help >/dev/null 2>&1 && echo "OpenBB MCP server OK" || {
+    echo "ERROR: Could not resolve openbb-mcp-server. Check your Python/pip setup."
     exit 1
-fi
+}
 
-echo "Using Python $python_version"
-
-# Create virtual environment if it doesn't exist
-if [[ ! -d ".venv" ]]; then
-    echo "Creating virtual environment..."
-    python3 -m venv .venv
-fi
-
-source .venv/bin/activate
-echo "Virtual environment activated."
-
-# Install OpenBB with MCP server
-echo ""
-echo "Installing OpenBB platform with MCP server..."
-pip install --upgrade pip
-pip install "openbb[all]" openbb-mcp-server
-
-# Copy config to OpenBB platform directory
+# Set up OpenBB API keys
 OPENBB_DIR="$HOME/.openbb_platform"
 mkdir -p "$OPENBB_DIR"
 
-if [[ -f "config/mcp_settings.json" ]]; then
-    cp config/mcp_settings.json "$OPENBB_DIR/mcp_settings.json"
-    echo "MCP settings installed to $OPENBB_DIR/mcp_settings.json"
-fi
-
-# Prompt for API keys
-echo ""
-echo "=== API Key Configuration ==="
-echo "OpenBB works best with data provider API keys."
-echo "You can configure them in: $OPENBB_DIR/user_settings.json"
-echo ""
-echo "Recommended free-tier providers for equity research:"
-echo "  - FMP (Financial Modeling Prep): https://financialmodelingprep.com/developer"
-echo "  - Polygon: https://polygon.io/"
-echo "  - Tiingo: https://www.tiingo.com/"
-echo "  - Alpha Vantage: https://www.alphavantage.co/"
-echo "  - FRED: https://fred.stlouisfed.org/docs/api/api_key.html"
-echo ""
-
-# Create user_settings.json template if it doesn't exist
 if [[ ! -f "$OPENBB_DIR/user_settings.json" ]]; then
     cat > "$OPENBB_DIR/user_settings.json" << 'SETTINGS'
 {
@@ -70,16 +42,16 @@ if [[ ! -f "$OPENBB_DIR/user_settings.json" ]]; then
   }
 }
 SETTINGS
-    echo "Template created at $OPENBB_DIR/user_settings.json"
-    echo "Edit this file to add your API keys."
+    echo "API key template created at $OPENBB_DIR/user_settings.json"
 fi
 
 echo ""
 echo "=== Setup Complete ==="
 echo ""
-echo "To start the MCP server manually:"
-echo "  source .venv/bin/activate"
-echo "  openbb-mcp --transport stdio"
+echo "Next steps:"
+echo "  1. Add API keys to $OPENBB_DIR/user_settings.json"
+echo "     (FMP free tier is a great starting point: https://financialmodelingprep.com/developer)"
 echo ""
-echo "Claude Code will start it automatically via .mcp.json."
-echo "Run 'claude' in this directory to get started."
+echo "  2. Run 'claude' in this directory — OpenBB connects automatically via .mcp.json"
+echo ""
+echo "That's it. No venv, no pip install. uvx handles everything."
