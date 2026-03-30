@@ -2,9 +2,11 @@
 
 Connect Claude to OpenBB's financial data platform. Claude gets access to hundreds of financial data tools — stock prices, fundamentals, estimates, SEC filings, economic indicators, news — through a single MCP connector.
 
-No servers to manage. No venvs. Just clone, add API keys, and run `claude`.
+No servers to manage. No venvs. Just clone, add API keys, and go.
 
 ## Quick Start
+
+### Option A: Claude Code (Terminal)
 
 ```bash
 git clone https://github.com/ethanhammett0/openbb_agent_configuration.git
@@ -27,6 +29,35 @@ Then just:
 ```bash
 claude
 ```
+
+### Option B: Claude Desktop / Web / Mobile (Custom Connector)
+
+For Claude's desktop app, web app, or your MD's phone — run the server in HTTP mode:
+
+```bash
+bash start_server.sh
+```
+
+This starts the OpenBB MCP server and prints a URL. Paste it into Claude:
+
+1. Go to **Customize > Connectors > +**
+2. Name: `OpenBB`
+3. URL: `http://localhost:8001/mcp/`
+4. Click **Add**
+
+**For remote access (MD's phone):** Use a tunnel to expose the server:
+
+```bash
+# In one terminal:
+bash start_server.sh
+
+# In another terminal:
+ngrok http 8001
+# Copy the https URL, append /mcp/
+# e.g. https://abc123.ngrok-free.app/mcp/
+```
+
+Paste the ngrok URL into Claude's custom connector dialog on any device.
 
 Claude auto-discovers the OpenBB MCP server via `.mcp.json` and has access to all financial data tools. That's it.
 
@@ -89,7 +120,7 @@ Your MD opens Claude Code (web or mobile), navigates to this project, and talks 
 
 Claude pulls live data from OpenBB and formats it clean.
 
-> **Mobile/web access:** The MCP server runs on whatever machine your Claude session is on. For team access, run Claude Code on a shared workstation or cloud instance.
+> **Mobile/web access:** Run `bash start_server.sh` on any machine, expose with ngrok, and paste the URL into Claude's custom connector. Your MD gets OpenBB on his phone in under a minute.
 
 ## API Keys
 
@@ -118,6 +149,7 @@ openbb_agent_configuration/
 ├── .mcp.json                    # MCP connector config (the important file)
 ├── CLAUDE.md                    # Instructions Claude reads on startup
 ├── setup.sh                     # One-command setup (installs uv if needed)
+├── start_server.sh              # Start HTTP server for Claude Desktop/Web/Mobile
 ├── .env.example                 # API key reference
 ├── config/
 │   ├── mcp_settings.json        # OpenBB MCP server settings
